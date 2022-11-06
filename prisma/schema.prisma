@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(uuid()) @map("_id")
+  name        String
+  price       Float
+  cost        Float
+  description String?
+  hasUnitInfo Boolean
+  unit        String?
+  perUnit     Int?
+  imageURL    String?
+  catelog     Catelog @relation(fields: [catelogId], references: [id])
+  catelogId   String
+  isActive    Boolean  @default(false)
+}
+
+model Catelog {
+  id       String    @id @default(uuid()) @map("_id")
+  name     String    @unique
+  products Product[]
+}
